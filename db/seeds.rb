@@ -20,6 +20,9 @@ Post.find_or_create_by!(
     title: "PH unique title",
     body: "PH unique body"
     )
+
+puts "#{Post.count}"
+Post.find_or_create_by(title: "My Unique Title", body: "This is my unique body")
 puts "#{Post.count}"
 
 puts "Seed finished"
