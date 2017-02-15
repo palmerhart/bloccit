@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe SponsoredPostsController, type: :controller do
   
   let(:my_topic) {Topic.create!(name: RandomData.random_sentence, description: RandomData.random_paragraph)}
-  let(:my_sponsored_post) {SponsoredPost.create!(title: RandomData.random_sentence , body: RandomData.random_paragraph, price: 100)}
+  let(:my_sponsored_post) {my_topic.sponsored_posts.create!(title: RandomData.random_sentence , body: RandomData.random_paragraph, price: 100)}
 
   describe "GET #show" do
     it "returns http success" do
@@ -62,7 +62,7 @@ RSpec.describe SponsoredPostsController, type: :controller do
   
   describe "POST create" do
     it "increases the number of sponsored_post by 1" do
-      expect{sponsored_post :create, topic_id: my_topic.id, sponsored_post: {title: RandomData.random_sentence, body: RandomData.random_paragraph, price: 100}}.to change(SponsoredPost,:count).by(1)
+      expect{post :create, topic_id: my_topic.id, sponsored_post: {title: RandomData.random_sentence, body: RandomData.random_paragraph, price: 100}}.to change(SponsoredPost,:count).by(1)
     end
     
     it "assigns the new sponsored_post to @sponsored_post" do
@@ -86,9 +86,9 @@ RSpec.describe SponsoredPostsController, type: :controller do
       
       updated_sponsored_post = assigns(:sponsored_post)
       expect(updated_sponsored_post.id).to eq my_sponsored_post.id
-      expect(updated_sponsored_post.title).to eq my_sponsored_post.title
-      expect(updated_sponsored_post.body).to eq my_sponsored_post.body
-      expect(updated_sponsored_post.price).to eq my_sponsored_post.price
+      expect(updated_sponsored_post.title).to eq new_title
+      expect(updated_sponsored_post.body).to eq new_body
+      expect(updated_sponsored_post.price).to eq new_price
     end
     
     it "redirects to the updated sponsored_post" do
@@ -99,4 +99,18 @@ RSpec.describe SponsoredPostsController, type: :controller do
       expect(response).to redirect_to [my_topic, my_sponsored_post]
     end
   end
+  
+  describe "DELETE destroy" do
+    it "deletes the sponsored post" do
+      delete :destroy, topic_id: my_topic.id, id: my_sponsored_post.id
+      count = SponsoredPost.where({id: my_sponsored_post.id}).size
+      expect(count).to eq 0
+    end
+    
+    it "redirects to topic show" do
+      delete :destroy, topic_id: my_topic.id, id: my_sponsored_post.id
+      expect(response).to redirect_to my_topic
+    end
+  end
+  
 end
