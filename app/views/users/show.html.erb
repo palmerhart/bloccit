@@ -32,6 +32,15 @@
 <%= render @user.comments %>
 
 <h2>Favorites</h2>
-<%= @user.favorites.each do |favorite| %>
-    <%= render favorite.post %>
-<% end %>    
+<div>
+    <%= @user.favorites.each do |favorite| %>
+        <div class="media">
+            <div class="pull-left">
+                <%= image_tag favorite.user.avatar_url(48), class: "gravatar" %>
+            </div>
+            <strong><%= favorite.post.title %></strong><br>
+            <bold>Points:</bold><%= favorite.post.points %><br>
+            <bold>Comments:</bold><%= favorite.post.comments.count %>
+        </div>
+    <% end %>
+</div>
