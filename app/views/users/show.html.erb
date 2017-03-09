@@ -33,7 +33,7 @@
 
 <h2>Favorites</h2>
 <div>
-    <%= @user.favorites.each do |favorite| %>
+    <% @user.favorites.each do |favorite| %>
         <div class="media">
             <div class="pull-left">
                 <%= image_tag favorite.user.avatar_url(48), class: "gravatar" %>
